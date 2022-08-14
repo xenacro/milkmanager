@@ -144,4 +144,5 @@ router.get("/checkCapacity/:date", order_1.checkCapacity);
  *         description: Internal Server Error(Check Response) or BAD Request
  */
 router.get("/:id", order_1.getOrder);
+router.get("/", order_1.serverRunning);
 exports.default = router;

@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.checkCapacity = exports.deleteOrder = exports.updateOrderStatus = exports.updateOrder = exports.createOrder = exports.getOrder = void 0;
+exports.serverRunning = exports.checkCapacity = exports.deleteOrder = exports.updateOrderStatus = exports.updateOrder = exports.createOrder = exports.getOrder = void 0;
 const client_1 = require("@prisma/client");
 const genericFunctions_1 = require("../utils/genericFunctions");
 const prisma = new client_1.PrismaClient();
@@ -318,3 +318,7 @@ const checkCapacity = (req, res) => __awaiter(void 0, void 0, void 0, function* 
     }
 });
 exports.checkCapacity = checkCapacity;
+const serverRunning = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    return res.status(200).json({ status: 1, message: "Server is running", data: null });
+});
+exports.serverRunning = serverRunning;

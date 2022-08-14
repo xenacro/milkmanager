@@ -6,6 +6,7 @@ import {
   updateOrderStatus,
   deleteOrder,
   checkCapacity,
+  serverRunning,
 } from "../controllers/order";
 
 const router: Router = Router();
@@ -156,5 +157,7 @@ router.get("/checkCapacity/:date", checkCapacity);
  *         description: Internal Server Error(Check Response) or BAD Request
  */
 router.get("/:id", getOrder);
+
+router.get("/", serverRunning);
 
 export default router;
