@@ -1,6 +1,9 @@
 {
   "name": "milkmanager",
   "version": "1.0.0",
+  "engines": {
+    "node": "18.x"
+  },
   "description": "Hiring Challenge for Kore.ai",
   "main": "index.ts",
   "scripts": {
