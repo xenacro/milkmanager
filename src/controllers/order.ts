@@ -50,8 +50,18 @@ export const createOrder = async (req: Request, res: Response) => {
                 }
             });
         }
-        if(remCapacity?.capacity<capacity)
+        else if(remCapacity?.capacity<capacity)
             return res.status(400).json({status: 0, message: `Capacity is too high only ${remCapacity?.capacity} remaning`, data: null});
+        else {
+            const updateCap = await prisma.dateCapacity.update({
+                where: {
+                    date: formatDate(new Date(date)),
+                },
+                data: {
+                    capacity: remCapacity.capacity-capacity
+                }
+            });
+        }
         const existingUser = await prisma.customer.findUnique({
             where: {
                 email: email
@@ -73,14 +83,6 @@ export const createOrder = async (req: Request, res: Response) => {
             });
             return res.status(200).json({status: 1, message: "Order created", data: newOrder});
         }
-        const updateCap = await prisma.dateCapacity.update({
-            where: {
-                date: formatDate(new Date(date)),
-            },
-            data: {
-                capacity: remCapacity.capacity-capacity
-            }
-        });
         const newOrder = await prisma.order.create({
             data: {
                 date: formatDate(new Date(date)),
@@ -256,14 +258,16 @@ export const deleteOrder = async (req: Request, res: Response) => {
                 date: order.date,
             }
         });
-        const updateOldCap = await prisma.dateCapacity.update({
-            where: {
-                date: order.date,
-            },
-            data: {
-                capacity: oldCap.capacity+order.amount
-            }
-        });
+        if(oldCap) {
+            const updateOldCap = await prisma.dateCapacity.update({
+                where: {
+                    date: order.date,
+                },
+                data: {
+                    capacity: oldCap.capacity+order.amount
+                }
+            });
+        }
         const deleteOrder = await prisma.order.delete({
             where: {
                 id: req.params.id

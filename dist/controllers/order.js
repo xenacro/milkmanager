@@ -60,8 +60,18 @@ const createOrder = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
                 }
             });
         }
-        if ((remCapacity === null || remCapacity === void 0 ? void 0 : remCapacity.capacity) < capacity)
+        else if ((remCapacity === null || remCapacity === void 0 ? void 0 : remCapacity.capacity) < capacity)
             return res.status(400).json({ status: 0, message: `Capacity is too high only ${remCapacity === null || remCapacity === void 0 ? void 0 : remCapacity.capacity} remaning`, data: null });
+        else {
+            const updateCap = yield prisma.dateCapacity.update({
+                where: {
+                    date: (0, genericFunctions_1.formatDate)(new Date(date)),
+                },
+                data: {
+                    capacity: remCapacity.capacity - capacity
+                }
+            });
+        }
         const existingUser = yield prisma.customer.findUnique({
             where: {
                 email: email
@@ -83,14 +93,6 @@ const createOrder = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
             });
             return res.status(200).json({ status: 1, message: "Order created", data: newOrder });
         }
-        const updateCap = yield prisma.dateCapacity.update({
-            where: {
-                date: (0, genericFunctions_1.formatDate)(new Date(date)),
-            },
-            data: {
-                capacity: remCapacity.capacity - capacity
-            }
-        });
         const newOrder = yield prisma.order.create({
             data: {
                 date: (0, genericFunctions_1.formatDate)(new Date(date)),
@@ -268,14 +270,16 @@ const deleteOrder = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
                 date: order.date,
             }
         });
-        const updateOldCap = yield prisma.dateCapacity.update({
-            where: {
-                date: order.date,
-            },
-            data: {
-                capacity: oldCap.capacity + order.amount
-            }
-        });
+        if (oldCap) {
+            const updateOldCap = yield prisma.dateCapacity.update({
+                where: {
+                    date: order.date,
+                },
+                data: {
+                    capacity: oldCap.capacity + order.amount
+                }
+            });
+        }
         const deleteOrder = yield prisma.order.delete({
             where: {
                 id: req.params.id
