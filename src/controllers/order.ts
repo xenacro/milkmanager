@@ -305,5 +305,5 @@ export const checkCapacity = async (req: Request, res: Response) => {
 }
 
 export const serverRunning = async (req: Request, res: Response) =>{
-    return res.status(200).json({status: 1, message: "Server is running", data: null});
+    return res.status(200).json({status: 1, message: "Server is running, docmenataion at: /swagger", data: null});
 }
