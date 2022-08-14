@@ -29,11 +29,11 @@ export const createOrder = async (req: Request, res: Response) => {
         var givenDate = new Date(date);
         givenDate.setHours(0, 0, 0, 0);
         if(givenDate < today) {
-            return res.status(400).json({status: 0, message: "No Time Travellers Available", data: null});
+            return res.status(500).json({status: 0, message: "No Time Travellers Available", data: null});
         }
         const capacity : number = Number(req.body.amount);
         if(capacity < 0.5)
-            return res.status(400).json({status: 0, message: "Amount must be atleast 0.5", data: null});
+            return res.status(500).json({status: 0, message: "Amount must be atleast 0.5", data: null});
         const maxv : number = Number(500);
         const remCapacity = await prisma.dateCapacity.findUnique({
             where: {
@@ -113,11 +113,11 @@ export const updateOrder = async (req: Request, res: Response) => {
         var givenDate = new Date(date);
         givenDate.setHours(0, 0, 0, 0);
         if(givenDate < today) {
-            return res.status(400).json({status: 0, message: "No Time Travellers Available", data: null});
+            return res.status(500).json({status: 0, message: "No Time Travellers Available", data: null});
         }
         const capacity : number = Number(req.body.amount);
         if(capacity < 0.5)
-            return res.status(400).json({status: 0, message: "Amount must be atleast 0.5", data: null});
+            return res.status(500).json({status: 0, message: "Amount must be atleast 0.5", data: null});
         const maxv : number = Number(500);
         const remCapacity = await prisma.dateCapacity.findUnique({
             where: {
@@ -288,7 +288,7 @@ export const checkCapacity = async (req: Request, res: Response) => {
         var givenDate = new Date(date);
         givenDate.setHours(0, 0, 0, 0);
         if(givenDate < today)
-            return res.status(400).json({status: 0, message: "Get Over The Past", data: null});
+            return res.status(500).json({status: 0, message: "Get Over The Past", data: null});
         const capacity = await prisma.dateCapacity.findUnique({
             where: {
                 date: formatDate(givenDate),
